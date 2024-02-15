@@ -238,39 +238,41 @@ tabscounter = 0
 information = function(string)
     for i,v in pairs(G:GetChildren()) do
         if v.Name == "info" then
-        	local TweenInf0 = TweenInfo.new(0.5) 
-			local PlayThis = TweenService:Create(v, TweenInf0, {Position = UDim2.new(0,380,0,850)})
-			PlayThis:Play()
-         	
-          	wait(0.6)
         	v:Destroy()
         end
     end
-    
-    
-local TextLabel = Instance.new("TextButton")
-TextLabel.Parent = G
-TextLabel.Size = UDim2.new(0,525,0,25)
-TextLabel.Position = UDim2.new(0,380,0,850)
-TextLabel.TextScaled = true
-TextLabel.BackgroundColor3 = Color3.fromRGB(5,5,5)
-TextLabel.TextColor3 = Data.TextColor
-TextLabel.Name = "info"
-TextLabel.Text = string
-
-local TweenInf0 = TweenInfo.new(0.5) 
-local PlayThis = TweenService:Create(TextLabel, TweenInf0, {Position = UDim2.new(0,380,0,620)})
-PlayThis:Play()
-
-TextLabel.MouseButton1Click:Connect(function()
-    local TweenInf0 = TweenInfo.new(1.5) 
-	local PlayThis = TweenService:Create(TextLabel, TweenInf0, {Position = UDim2.new(0,380,0,850)})
-	PlayThis:Play()
-end)
-wait(5)
-local TweenInf0 = TweenInfo.new(1.5) 
-local PlayThis = TweenService:Create(TextLabel, TweenInf0, {Position = UDim2.new(0,380,0,850)})
-PlayThis:Play()
+	local TextLabel = Instance.new("TextButton")
+	TextLabel.Parent = G
+	TextLabel.Size = UDim2.new(1,0,0,25)
+	TextLabel.Position = UDim2.new(0,0,0,660)
+	TextLabel.TextScaled = true
+	TextLabel.BackgroundTransparency = 1
+	TextLabel.TextColor3 = Data.TextColor
+	TextLabel.Name = "info"
+	TextLabel.Text = string
+ 	TextLabel.TextStrokeTransparency = 0
+  	TextLabel.TextStrokeColor3 = Data.DColor
+ 
+ 	local msg = ""
+ 	for i,v in pairs(string.split(string,"")) do
+    	msg = msg..v
+     	TextLabel.Text = msg
+      	wait(0.02)
+    end
+	wait(3.5)
+ 	for i,v in pairs(string.split(string,"")) do
+     	Split = string.split(TextLabel.Text,"")
+      	local index = table.find(Split, Split[#Split]) 
+        table.remove(Split, index)
+        rmsg = ""
+        for i,v in pairs(Split) do
+            rmsg = rmsg..v
+     		TextLabel.Text = rmsg
+        end
+    	
+      	wait(0.01)
+    end
+	TextLabel:Destroy()
 end
 
 newtab = function(name, iconid)
