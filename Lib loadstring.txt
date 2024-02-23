@@ -917,19 +917,135 @@ selector = function(name, tab, table, func, desc)
        	-- Size {0, 360}, {0, 260}
         -- pos {0, 114}, {0, 222}
        
-      	local Dropper = Instance.new("Frame")
+      	local Dropper = Instance.new("ScrollingFrame")
     	Dropper.Parent = Tabs
-    	Dropper.Size = UDim2.new(0,290,0,180)
-   		Dropper.Position = UDim2.new(0,0,0,0)
-    	Dropper.BackgroundColor3 = Data.DColor
+    	Dropper.Size = UDim2.new(0,310,0,0) -- 270
+   		Dropper.Position = UDim2.new(0,65,0,218)
+    	Dropper.BackgroundColor3 = Color3.fromRGB(10,10,10)
     	Dropper.BorderColor3 = Data.DColor
     	Dropper.ZIndex = 10
         Dropper.Draggable = true 
 		Dropper.Active = true 
 		Dropper.Selectable = true
   		Dropper.Name = name
-    	Dropper.Visible = false
-      
+     	Dropper.ScrollBarImageColor3 = Data.MColor
+		Dropper.ScrollBarImageTransparency = 0
+		Dropper.CanvasSize = UDim2.new(0,0,0,0)
+  		Dropper.Visible = false
+    
+    	local TextL = Instance.new("TextLabel")
+    	TextL.Parent = Dropper
+    	TextL.Size = UDim2.new(0,310,0,20) -- 270
+   		TextL.Position = UDim2.new(0,0,0,7)
+    	TextL.BackgroundTransparency = 1
+    	TextL.ZIndex = 10
+     	TextL.Text = name
+      	TextL.Font = Data.Font
+       	TextL.TextColor3 = Data.MColor
+        TextL.TextScaled = true
+        TextL.TextYAlignment = "Top"
+        
+        local Box = Instance.new("TextBox")
+    	Box.Parent = Dropper
+    	Box.Size = UDim2.new(0,310 -80,0,22) -- 270
+   		Box.Position = UDim2.new(0,40,0,37)
+    	Box.BackgroundColor3 = Data.DColor
+     	Box.BorderColor3 = Data.DColor
+    	Box.ZIndex = 10
+     	Box.Text = ""
+      	Box.PlaceholderText = "Search"
+      	Box.Font = Data.Font
+       	Box.TextColor3 = Data.MColor
+        Box.TextScaled = true
+        
+        local Scroll = Instance.new("ScrollingFrame")
+    	Scroll.Parent = Dropper
+    	Scroll.Size = UDim2.new(0,310 -80,0,200) -- 270
+   		Scroll.Position = UDim2.new(0,40,0,70)
+    	Scroll.BackgroundTransparency = 1
+     	Scroll.BorderColor3 = Data.DColor
+    	Scroll.ZIndex = 10
+        Scroll.ScrollBarImageColor3 = Data.MColor
+		Scroll.ScrollBarImageTransparency = 0
+		Scroll.CanvasSize = UDim2.new(0,0,0,1900)
+     
+        onoff = false
+     
+     	local load = function(string)
+          	posf = 37
+        	local tble = table()
+         
+         	for i,v in pairs(Scroll:GetChildren()) do
+            	v:Destroy()
+            end
+        
+         	for i,v in pairs(tble) do
+              	if typeof(v) ~= "Instance" then
+                   	if v:lower():match(string) then
+            		local label = Instance.new("TextButton")
+    				label.Parent = Scroll
+    				label.Size = UDim2.new(0,310 -80,0,22) -- 270
+   					label.Position = UDim2.new(0,0,0,posf)
+    				label.BackgroundColor3 = Data.DColor
+     				label.BorderColor3 = Data.DColor
+    				label.ZIndex = 11
+           			label.Text = v
+      				label.Font = Data.Font
+       				label.TextColor3 = Data.MColor
+        			label.TextScaled = true
+           			posf = posf +22
+              
+              		label.MouseButton1Click:Connect(function()
+                    	value = v
+                     	func()
+                      	onoff = false
+             			local TweenInf0 = TweenInfo.new(0.35) 
+						local PlayThis = TweenService:Create(Dropper, TweenInf0, {Size = UDim2.new(0,310,0,0)})
+						PlayThis:Play()
+    					wait(0.36)
+       					Dropper.Visible = false
+                   	end)
+              
+           			end
+          		else
+            		if v.Name:lower():match(string) then
+            		local label = Instance.new("TextButton")
+    				label.Parent = Scroll
+    				label.Size = UDim2.new(0,310 -80,0,22) -- 270
+   					label.Position = UDim2.new(0,0,0,posf)
+    				label.BackgroundColor3 = Data.DColor
+     				label.BorderColor3 = Data.DColor
+    				label.ZIndex = 11
+           			label.Text = v.Name
+      				label.Font = Data.Font
+       				label.TextColor3 = Data.MColor
+        			label.TextScaled = true
+           			posf = posf +22
+              
+              		label.MouseButton1Click:Connect(function()
+                    	value = v
+                     	func()
+                     	onoff = false
+             			local TweenInf0 = TweenInfo.new(0.35) 
+						local PlayThis = TweenService:Create(Dropper, TweenInf0, {Size = UDim2.new(0,310,0,0)})
+						PlayThis:Play()
+    					wait(0.36)
+       					Dropper.Visible = false
+                   	end)
+              
+           			end
+           		end
+          
+          		
+            end
+        end
+    
+    	load("")
+     
+     	Box.FocusLost:Connect(function()
+        	load(Box.Text:lower())
+        end)
+      	
       	if desc ~= nil then
             Button.Position = UDim2.new(0,20,0,0)
       		dots = Instance.new("ImageButton")
@@ -946,14 +1062,21 @@ selector = function(name, tab, table, func, desc)
       
  		tabT[1] = frame
    		
-     	onoff = false
+
    		Button.MouseButton1Click:Connect(function()
         	if onoff then
             	onoff = false
-             	Dropper.Visible = false
+             	local TweenInf0 = TweenInfo.new(0.35) 
+				local PlayThis = TweenService:Create(Dropper, TweenInf0, {Size = UDim2.new(0,310,0,0)})
+				PlayThis:Play()
+    			wait(0.36)
+       			Dropper.Visible = false
         	else
         		onoff = true
-             	Dropper.Visible = true
+          		Dropper.Visible = true
+              	local TweenInf0 = TweenInfo.new(0.35) 
+				local PlayThis = TweenService:Create(Dropper, TweenInf0, {Size = UDim2.new(0,310,0,270)})
+				PlayThis:Play()
            	end
         end)
     	
