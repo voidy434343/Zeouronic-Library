@@ -651,7 +651,7 @@ slider = function(name, tab, min, max, starting, func, desc)
       	else
        		frame.Parent = tabT[3].ScrollingFrame
      	end
-    	frame.Name = "Button, "..name.."|"..tabT[4]
+    	frame.Name = "Slider, "..name.."|"..tabT[4]
     	frame.Size = UDim2.new(0,175,0,30)
         if tabT[1] ~= nil then
         	local pos = tabT[1].Size.Y.Offset
@@ -763,7 +763,7 @@ keybind = function(name, tab, keycode, keybindText, func, desc)
       	else
        		frame.Parent = tabT[3].ScrollingFrame
      	end
-    	frame.Name = "Switch, "..name.."|"..tabT[4]
+    	frame.Name = "Keybind, "..name.."|"..tabT[4]
     	frame.Size = UDim2.new(0,175,0,30)
         if tabT[1] ~= nil then
         	local pos = tabT[1].Size.Y.Offset
@@ -868,5 +868,120 @@ keybind = function(name, tab, keycode, keybindText, func, desc)
             	information(desc)
             end)
         end
+    end
+end
+
+selector = function(name, tab, table, func, desc)
+    for i,v in pairs(tabs) do
+    	if v[2] == tab then
+        	tabT = v
+        end
+    end
+    
+    if tabT then
+        tabT[4] = tabT[4] +1
+        local pos = tabT[3].ScrollingFrame.Size.Y.Offset +30
+        tabT[3].ScrollingFrame.Size = UDim2.new(0,175,0,pos)
+        tabT[5] = pos
+        
+    	local frame = Instance.new("Frame")
+        if tabT[1] ~= nil then
+    		frame.Parent = tabT[1]
+      	else
+       		frame.Parent = tabT[3].ScrollingFrame
+     	end
+    	frame.Name = "Selector, "..name.."|"..tabT[4]
+    	frame.Size = UDim2.new(0,175,0,30)
+        if tabT[1] ~= nil then
+        	local pos = tabT[1].Size.Y.Offset
+            frame.Position = UDim2.new(0,0,0,pos)
+        end
+    	frame.BackgroundColor3 = Color3.fromRGB(10,10,10)
+    	frame.BorderColor3 = frame.BackgroundColor3
+    	frame.ZIndex = 10
+     
+     	local Button = Instance.new("TextButton")
+    	Button.Parent = frame
+    	Button.Size = UDim2.new(0,175 -50,0,30)
+   		Button.Position = UDim2.new(0,8,0,0)
+    	Button.BackgroundColor3 = Color3.fromRGB(10,10,10)
+    	Button.BorderColor3 = frame.BackgroundColor3
+    	Button.TextColor3 = Data.TextColor
+ 		Button.TextScaled = true
+    	Button.ZIndex = 10
+    	Button.Text = name
+    	Button.Font = Data.Font
+     	Button.TextXAlignment = "Left"
+      	
+       	-- Size {0, 360}, {0, 260}
+        -- pos {0, 114}, {0, 222}
+       
+      	local Dropper = Instance.new("Frame")
+    	Dropper.Parent = Tabs
+    	Dropper.Size = UDim2.new(0,290,0,180)
+   		Dropper.Position = UDim2.new(0,0,0,0)
+    	Dropper.BackgroundColor3 = Data.DColor
+    	Dropper.BorderColor3 = Data.DColor
+    	Dropper.ZIndex = 10
+        Dropper.Draggable = true 
+		Dropper.Active = true 
+		Dropper.Selectable = true
+  		Dropper.Name = name
+    	Dropper.Visible = false
+      
+      	if desc ~= nil then
+            Button.Position = UDim2.new(0,20,0,0)
+      		dots = Instance.new("ImageButton")
+    		dots.Parent = frame
+    		dots.Size = UDim2.new(0,24,0,24)
+   			dots.Position = UDim2.new(0,0,0,6 /2)
+    		dots.BackgroundColor3 = Color3.fromRGB(10,10,10)
+    		dots.BorderColor3 = frame.BackgroundColor3
+    		dots.ZIndex = 10
+     		dots.Image = "http://www.roblox.com/asset/?id=16312714761"
+      		dots.ImageColor3 = Data.MColor
+        	dots.BackgroundTransparency = 1
+       	end
+      
+ 		tabT[1] = frame
+   		
+     	onoff = false
+   		Button.MouseButton1Click:Connect(function()
+        	if onoff then
+            	onoff = false
+             	Dropper.Visible = false
+        	else
+        		onoff = true
+             	Dropper.Visible = true
+           	end
+        end)
+    	
+     	if desc ~= nil then 
+      		dots.MouseButton1Click:Connect(function()
+            	information(desc)
+            end)
+        end
+    end
+end
+
+downvals = function(table)
+    for i,v in pairs(G:GetChildren()) do
+        if v.Name == "value" then
+        	v:Destroy()
+        end
+    end
+	local num = 0.97
+	for i,v in pairs(table) do
+    	local val = Instance.new("TextLabel")
+     	val.BackgroundTransparency = 1
+      	val.Text = v
+       	val.Size = UDim2.new(0.15, 0, 0.03 ,0)
+        val.Position = UDim2.new(0.85, 0, num, 0)
+        val.TextColor3 = Data.MColor
+        val.Parent = G
+        val.TextScaled = true
+        val.Name = "value"
+        val.TextXAlignment = "Right"
+        num = num -0.03
     end
 end
