@@ -252,6 +252,7 @@ information = function(string)
 	TextLabel.Text = string
  	TextLabel.TextStrokeTransparency = 0
   	TextLabel.TextStrokeColor3 = Data.DColor
+   	TextLabel.Font = Data.Font
  
  	local msg = ""
  	for i,v in pairs(string.split(string,"")) do
@@ -982,6 +983,9 @@ downvals = function(table)
         val.TextScaled = true
         val.Name = "value"
         val.TextXAlignment = "Right"
+        val.TextStrokeTransparency = 0
+  		val.TextStrokeColor3 = Data.DColor
+    	val.Font = Data.Font
         num = num -0.03
     end
 end
