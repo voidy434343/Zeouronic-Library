@@ -538,12 +538,12 @@ switch = function(name, tab, func, desc)
      	Switch.MouseButton1Click:Connect(function()
             if bool then
  				Switch.BackgroundColor3 = Data.DColor
-     			bool = false
-        		func()
+     			local bool = false
+        		func(bool)
  			else
     			Switch.BackgroundColor3 = Data.MColor
-       			bool = true
-          		func()
+       			local bool = true
+          		func(bool)
             end
         end)
        	
@@ -621,8 +621,8 @@ textbox = function(name, tab, default, func, desc)
      	Label.FocusLost:Connect(function()
           	textt = Label.Text
             Label.Text = name
-            string = textt
-            func()
+            local string = textt
+            func(string)
         end)
        	
      	if desc ~= nil then 
@@ -720,7 +720,7 @@ slider = function(name, tab, min, max, starting, func, desc)
                 if Box.Text == "" then
                     Box.Text = 0
                 end
-                number = tonumber(Box.Text)
+                local number = tonumber(Box.Text)
                 if number < min or number > max then
                     if number < min then
                         Box.Text = min
@@ -731,7 +731,7 @@ slider = function(name, tab, min, max, starting, func, desc)
                         number = max
                     end
                 end
-                func()
+                func(number)
                 local TweenInf0 = TweenInfo.new(0.2) 
 				local PlayThis = TweenService:Create(Label, TweenInf0, {Size = UDim2.new(0,number /max *125,0,20)})
 				PlayThis:Play()
@@ -996,8 +996,8 @@ selector = function(name, tab, table, func, desc)
            			posf = posf +22
               
               		label.MouseButton1Click:Connect(function()
-                    	value = v
-                     	func()
+                    	local value = v
+                     	func(value)
                       	onoff = false
              			local TweenInf0 = TweenInfo.new(0.35) 
 						local PlayThis = TweenService:Create(Dropper, TweenInf0, {Size = UDim2.new(0,310,0,0)})
@@ -1023,8 +1023,8 @@ selector = function(name, tab, table, func, desc)
            			posf = posf +22
               
               		label.MouseButton1Click:Connect(function()
-                    	value = v
-                     	func()
+                    	local value = v
+                     	func(value)
                      	onoff = false
              			local TweenInf0 = TweenInfo.new(0.35) 
 						local PlayThis = TweenService:Create(Dropper, TweenInf0, {Size = UDim2.new(0,310,0,0)})
@@ -1041,6 +1041,219 @@ selector = function(name, tab, table, func, desc)
         end
     
     	load("")
+     
+     	Box.FocusLost:Connect(function()
+        	load(Box.Text:lower())
+        end)
+      	
+      	if desc ~= nil then
+            Button.Position = UDim2.new(0,20,0,0)
+      		dots = Instance.new("ImageButton")
+    		dots.Parent = frame
+    		dots.Size = UDim2.new(0,24,0,24)
+   			dots.Position = UDim2.new(0,0,0,6 /2)
+    		dots.BackgroundColor3 = Color3.fromRGB(10,10,10)
+    		dots.BorderColor3 = frame.BackgroundColor3
+    		dots.ZIndex = 10
+     		dots.Image = "http://www.roblox.com/asset/?id=16312714761"
+      		dots.ImageColor3 = Data.MColor
+        	dots.BackgroundTransparency = 1
+       	end
+      
+ 		tabT[1] = frame
+   		
+
+   		Button.MouseButton1Click:Connect(function()
+        	if onoff then
+            	onoff = false
+             	local TweenInf0 = TweenInfo.new(0.35) 
+				local PlayThis = TweenService:Create(Dropper, TweenInf0, {Size = UDim2.new(0,310,0,0)})
+				PlayThis:Play()
+    			wait(0.36)
+       			Dropper.Visible = false
+        	else
+        		onoff = true
+          		Dropper.Visible = true
+              	local TweenInf0 = TweenInfo.new(0.35) 
+				local PlayThis = TweenService:Create(Dropper, TweenInf0, {Size = UDim2.new(0,310,0,270)})
+				PlayThis:Play()
+           	end
+        end)
+    	
+     	if desc ~= nil then 
+      		dots.MouseButton1Click:Connect(function()
+            	information(desc)
+            end)
+        end
+    end
+end
+
+plrselector = function(name, tab, func, desc)
+    for i,v in pairs(tabs) do
+    	if v[2] == tab then
+        	tabT = v
+        end
+    end
+    
+    if tabT then
+        tabT[4] = tabT[4] +1
+        local pos = tabT[3].ScrollingFrame.Size.Y.Offset +30
+        tabT[3].ScrollingFrame.Size = UDim2.new(0,175,0,pos)
+        tabT[5] = pos
+        
+    	local frame = Instance.new("Frame")
+        if tabT[1] ~= nil then
+    		frame.Parent = tabT[1]
+      	else
+       		frame.Parent = tabT[3].ScrollingFrame
+     	end
+    	frame.Name = "PlrSelector, "..name.."|"..tabT[4]
+    	frame.Size = UDim2.new(0,175,0,30)
+        if tabT[1] ~= nil then
+        	local pos = tabT[1].Size.Y.Offset
+            frame.Position = UDim2.new(0,0,0,pos)
+        end
+    	frame.BackgroundColor3 = Color3.fromRGB(10,10,10)
+    	frame.BorderColor3 = frame.BackgroundColor3
+    	frame.ZIndex = 10
+     
+     	local Button = Instance.new("TextButton")
+    	Button.Parent = frame
+    	Button.Size = UDim2.new(0,175 -50,0,30)
+   		Button.Position = UDim2.new(0,8,0,0)
+    	Button.BackgroundColor3 = Color3.fromRGB(10,10,10)
+    	Button.BorderColor3 = frame.BackgroundColor3
+    	Button.TextColor3 = Data.TextColor
+ 		Button.TextScaled = true
+    	Button.ZIndex = 10
+    	Button.Text = name
+    	Button.Font = Data.Font
+     	Button.TextXAlignment = "Left"
+      	
+       	-- Size {0, 360}, {0, 260}
+        -- pos {0, 114}, {0, 222}
+       
+      	local Dropper = Instance.new("ScrollingFrame")
+    	Dropper.Parent = Tabs
+    	Dropper.Size = UDim2.new(0,310,0,0) -- 270
+   		Dropper.Position = UDim2.new(0,65,0,218)
+    	Dropper.BackgroundColor3 = Color3.fromRGB(10,10,10)
+    	Dropper.BorderColor3 = Data.DColor
+    	Dropper.ZIndex = 10
+        Dropper.Draggable = true 
+		Dropper.Active = true 
+		Dropper.Selectable = true
+  		Dropper.Name = name
+     	Dropper.ScrollBarImageColor3 = Data.MColor
+		Dropper.ScrollBarImageTransparency = 0
+		Dropper.CanvasSize = UDim2.new(0,0,0,0)
+  		Dropper.Visible = false
+    
+    	local TextL = Instance.new("TextLabel")
+    	TextL.Parent = Dropper
+    	TextL.Size = UDim2.new(0,310,0,20) -- 270
+   		TextL.Position = UDim2.new(0,0,0,7)
+    	TextL.BackgroundTransparency = 1
+    	TextL.ZIndex = 10
+     	TextL.Text = name
+      	TextL.Font = Data.Font
+       	TextL.TextColor3 = Data.MColor
+        TextL.TextScaled = true
+        TextL.TextYAlignment = "Top"
+        
+        local Box = Instance.new("TextBox")
+    	Box.Parent = Dropper
+    	Box.Size = UDim2.new(0,310 -80,0,22) -- 270
+   		Box.Position = UDim2.new(0,40,0,37)
+    	Box.BackgroundColor3 = Data.DColor
+     	Box.BorderColor3 = Data.DColor
+    	Box.ZIndex = 10
+     	Box.Text = ""
+      	Box.PlaceholderText = "Search"
+      	Box.Font = Data.Font
+       	Box.TextColor3 = Data.MColor
+        Box.TextScaled = true
+        
+        local Scroll = Instance.new("ScrollingFrame")
+    	Scroll.Parent = Dropper
+    	Scroll.Size = UDim2.new(0,310 -80,0,200) -- 270
+   		Scroll.Position = UDim2.new(0,40,0,70)
+    	Scroll.BackgroundTransparency = 1
+     	Scroll.BorderColor3 = Data.DColor
+    	Scroll.ZIndex = 10
+        Scroll.ScrollBarImageColor3 = Data.MColor
+		Scroll.ScrollBarImageTransparency = 0
+		Scroll.CanvasSize = UDim2.new(0,0,0,1900)
+     
+        onoff = false
+     
+     	local load = function(string)
+          	posf = 37
+           	local taaable = function() return game.Players:GetChildren() end
+        	local tble = taaable()
+         
+         	for i,v in pairs(Scroll:GetChildren()) do
+            	v:Destroy()
+            end
+        
+         	for i,v in pairs(tble) do
+            	if v.Name:lower():match(string) then
+            		local label = Instance.new("TextButton")
+    				label.Parent = Scroll
+    				label.Size = UDim2.new(0,310 -80,0,22) -- 270
+   					label.Position = UDim2.new(0,0,0,posf)
+    				label.BackgroundColor3 = v.TeamColor.Color
+     				label.BorderColor3 = Data.DColor
+    				label.ZIndex = 11
+           			label.Text = v.Name
+      				label.Font = Data.Font
+       				label.TextColor3 = Color3.fromRGB(225,225,225)
+        			label.TextScaled = true
+           			posf = posf +22
+              
+              		label.MouseButton1Click:Connect(function()
+                    	local value = v
+                     	func(value)
+                     	onoff = false
+             			local TweenInf0 = TweenInfo.new(0.35) 
+						local PlayThis = TweenService:Create(Dropper, TweenInf0, {Size = UDim2.new(0,310,0,0)})
+						PlayThis:Play()
+    					wait(0.36)
+       					Dropper.Visible = false
+                   	end)
+           		end
+          
+          		
+            end
+        end
+    
+    	load("")
+     
+     	game.Players.PlayerAdded:Connect(function(playa)
+        	local label = Instance.new("TextButton")
+    				label.Parent = Scroll
+    				label.Size = UDim2.new(0,310 -80,0,22) -- 270
+   					label.Position = UDim2.new(0,0,0,posf)
+    				label.BackgroundColor3 = Data.DColor
+     				label.BorderColor3 = Data.DColor
+    				label.ZIndex = 11
+           			label.Text = playa.Name
+      				label.Font = Data.Font
+       				label.TextColor3 = Data.MColor
+        			label.TextScaled = true
+           			posf = posf +22
+              
+              		label.MouseButton1Click:Connect(function()
+                    	local value = playa
+                     	func(value)
+                      	onoff = false
+             			local TweenInf0 = TweenInfo.new(0.35) 
+						local PlayThis = TweenService:Create(Dropper, TweenInf0, {Size = UDim2.new(0,310,0,0)})
+						PlayThis:Play()
+    					wait(0.36)
+       					Dropper.Visible = false
+                   	end)
+        end)
      
      	Box.FocusLost:Connect(function()
         	load(Box.Text:lower())
