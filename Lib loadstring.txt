@@ -1,6 +1,16 @@
 local lp = game.Players.LocalPlayer
 local TweenService = game:GetService("TweenService")
 
+if (writefile) then
+	if not isfolder('Zeouronic-Library') then
+    	makefolder("Zeouronic-Library")
+	end
+
+	if not isfile('Zeouronic-Library/'..Data.NameOfYourScript) then
+    	writefile('Zeouronic-Library/'..Data.NameOfYourScript, "false")
+	end
+end
+
 for i,v in pairs(Data.GParent:GetChildren()) do
     if v.Name == Data.NameOfYourScript then
         v:Destroy()
@@ -29,26 +39,11 @@ else
 end
 
 if Data.KeySystem.On then
-    local HttpService = game:GetService("HttpService")
-
-	local controlFile = Data.NameOfYourScript.."KeySystem.txt"
-	local defaultSettings = {
-    	Key = ""
-	}
-
-	local function fileExists(filename)
-    	return isfile(filename)
-	end
-
-	if fileExists(controlFile) then
-    	local fileContent = readfile(controlFile)
-    	local data = HttpService:JSONDecode(fileContent)
-    	KeyFound = data.SavedKey
-	else
-    	local defaultSettingsJSON = HttpService:JSONEncode(defaultSettings)
-    	writefile(controlFile, defaultSettingsJSON)
-    	KeyFound = defaultSettings.Key
-	end
+    if (writefile) then
+        goooottenkey = readfile('Zeouronic-Library/'..Data.NameOfYourScript)
+    else
+    	goooottenkey = "false"
+    end
 
 	local KeySys = Instance.new("ScreenGui")
 
@@ -111,7 +106,7 @@ if Data.KeySystem.On then
         setclipboard(Data.KeySystem.GetKeyLink)
     end)
 	
- 	if KeyFound == Data.KeySystem.Key then
+ 	if goooottenkey == Data.KeySystem.Key and Data.KeySystem.SaveKey then
   		G.Parent = Data.GParent
         G.Enabled = true
         KeySys:Destroy()
@@ -120,19 +115,10 @@ if Data.KeySystem.On then
 	KeyBox.FocusLost:Connect(function()
         KeyT = KeyBox.Text
         if KeyT:lower() == Data.KeySystem.Key:lower() then
+            writefile('Zeouronic-Library/'..Data.NameOfYourScript, Data.KeySystem.Key)
+            
             G.Parent = Data.GParent
-            G.Enabled = true
-              
-    		local newsave = {
-    			SavedKey = KeyT
-    		}
-    
-    		local json;
-    		local HttpService = game:GetService("HttpService");
-    		if (writefile) then
-        		json = HttpService:JSONEncode(newsave);
-        		writefile(Data.NameOfYourScript.."KeySystem.txt", json);
-          	end
+        	G.Enabled = true
             KeySys:Destroy()
         end
     end)
