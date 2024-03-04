@@ -534,16 +534,16 @@ switch = function(name, tab, func, desc)
     	
  		tabT[1] = frame
    		
-     	bool = false
+     	boolboolboolboolboolboolboolboolboolboolboolboolboolboolboolboolboolboolbool = false
      	Switch.MouseButton1Click:Connect(function()
             if bool then
  				Switch.BackgroundColor3 = Data.DColor
-     			local bool = false
-        		func(bool)
+     			boolboolboolboolboolboolboolboolboolboolboolboolboolboolboolboolboolboolbool = false
+        		func(boolboolboolboolboolboolboolboolboolboolboolboolboolboolboolboolboolboolbool)
  			else
     			Switch.BackgroundColor3 = Data.MColor
-       			local bool = true
-          		func(bool)
+       			boolboolboolboolboolboolboolboolboolboolboolboolboolboolboolboolboolboolbool = true
+          		func(boolboolboolboolboolboolboolboolboolboolboolboolboolboolboolboolboolboolbool)
             end
         end)
        	
