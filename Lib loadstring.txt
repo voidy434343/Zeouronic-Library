@@ -536,7 +536,7 @@ switch = function(name, tab, func, desc)
    		
      	boolboolboolboolboolboolboolboolboolboolboolboolboolboolboolboolboolboolbool = false
      	Switch.MouseButton1Click:Connect(function()
-            if bool then
+            if boolboolboolboolboolboolboolboolboolboolboolboolboolboolboolboolboolboolbool then
  				Switch.BackgroundColor3 = Data.DColor
      			boolboolboolboolboolboolboolboolboolboolboolboolboolboolboolboolboolboolbool = false
         		func(boolboolboolboolboolboolboolboolboolboolboolboolboolboolboolboolboolboolbool)
