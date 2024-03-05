@@ -72,7 +72,7 @@ if Data.KeySystem.On then
 	Keylabel.BorderColor3 = Data.MColor
 	Keylabel.ZIndex = math.huge -4
  	Keylabel.Text = Data.KeySystem.Text
-  	Keylabel.TextColor3 = Data.MColor
+  	Keylabel.TextColor3 = Data.TextColor
    	Keylabel.TextScaled = true
     Keylabel.TextYAlignment = "Top"
     Keylabel.Font = Data.Font
@@ -85,7 +85,7 @@ if Data.KeySystem.On then
 	KeyBox.BorderColor3 = Data.MColor
 	KeyBox.ZIndex = math.huge -4
  	KeyBox.Text = ""
-  	KeyBox.TextColor3 = Data.MColor
+  	KeyBox.TextColor3 = Data.TextColor
    	KeyBox.TextScaled = true
     KeyBox.Font = Data.Font
     KeyBox.PlaceholderText = "Key"
@@ -98,9 +98,10 @@ if Data.KeySystem.On then
 	GetKey.BorderColor3 = Data.MColor
 	GetKey.ZIndex = math.huge -4
  	GetKey.Text = "Get Key"
-  	GetKey.TextColor3 = Data.MColor
+  	GetKey.TextColor3 = Data.TextColor
    	GetKey.TextScaled = true
     GetKey.Font = Data.Font
+    GetKey.AutoButtonColor = false
     
     GetKey.MouseButton1Click:Connect(function()
         setclipboard(Data.KeySystem.GetKeyLink)
@@ -152,6 +153,7 @@ if Data.MainSettings.OnOff then
 	OnOff.ZIndex = math.huge
 	OnOff.Text = Data.NameOfYourScript
 	OnOff.Font = Data.Font
+ 	OnOff.AutoButtonColor = false
  
  	local Go = Instance.new("ScreenGui")
 
@@ -239,6 +241,7 @@ information = function(string)
  	TextLabel.TextStrokeTransparency = 0
   	TextLabel.TextStrokeColor3 = Data.DColor
    	TextLabel.Font = Data.Font
+    TextLabel.AutoButtonColor = false
  
  	local msg = ""
  	for i,v in pairs(string.split(string,"")) do
@@ -424,6 +427,7 @@ button = function(name, tab, func, desc)
     	Button.Text = name
     	Button.Font = Data.Font
      	Button.TextXAlignment = "Left"
+      	Button.AutoButtonColor = false
       
       	if desc ~= nil then
             Button.Position = UDim2.new(0,20,0,0)
@@ -503,6 +507,11 @@ switch = function(name, tab, func, desc)
     	Switch.BorderColor3 = frame.BackgroundColor3
     	Switch.ZIndex = 10
     	Switch.Text = ""
+     	Switch.AutoButtonColor = false
+     
+     	local SwitchRound = Instance.new("UICorner")
+		SwitchRound.Parent = Switch
+		SwitchRound.CornerRadius = UDim.new(0.07,0.07)
       
       	if desc ~= nil then
             Label.Position = UDim2.new(0,20,0,0)
@@ -523,11 +532,15 @@ switch = function(name, tab, func, desc)
      	boolboolboolboolboolboolboolboolboolboolboolboolboolboolboolboolboolboolbool = false
      	Switch.MouseButton1Click:Connect(function()
             if boolboolboolboolboolboolboolboolboolboolboolboolboolboolboolboolboolboolbool then
- 				Switch.BackgroundColor3 = Data.DColor
+                local TweenInf0 = TweenInfo.new(0.1) 
+				local PlayThis = TweenService:Create(Switch, TweenInf0, {BackgroundColor3 = Data.DColor})
+				PlayThis:Play()
      			boolboolboolboolboolboolboolboolboolboolboolboolboolboolboolboolboolboolbool = false
         		func(boolboolboolboolboolboolboolboolboolboolboolboolboolboolboolboolboolboolbool)
  			else
-    			Switch.BackgroundColor3 = Data.MColor
+    			local TweenInf0 = TweenInfo.new(0.1) 
+				local PlayThis = TweenService:Create(Switch, TweenInf0, {BackgroundColor3 = Data.MColor})
+				PlayThis:Play()
        			boolboolboolboolboolboolboolboolboolboolboolboolboolboolboolboolboolboolbool = true
           		func(boolboolboolboolboolboolboolboolboolboolboolboolboolboolboolboolboolboolbool)
             end
@@ -684,7 +697,7 @@ slider = function(name, tab, min, max, starting, func, desc)
     	Box.BorderColor3 = frame.BackgroundColor3
     	Box.ZIndex = 10
     	Box.Text = starting
-     	Box.TextColor3 = Data.MColor
+     	Box.TextColor3 = Data.TextColor
       
       	if desc ~= nil then
             Label.Position = UDim2.new(0,20,0,0)
@@ -717,10 +730,10 @@ slider = function(name, tab, min, max, starting, func, desc)
                         number = max
                     end
                 end
-                func(number)
                 local TweenInf0 = TweenInfo.new(0.2) 
 				local PlayThis = TweenService:Create(Label, TweenInf0, {Size = UDim2.new(0,number /max *125,0,20)})
 				PlayThis:Play()
+    			func(number)
             end)
        	
      	if desc ~= nil then 
@@ -781,6 +794,7 @@ keybind = function(name, tab, keycode, keybindText, func, desc)
     	Switch.BorderColor3 = frame.BackgroundColor3
     	Switch.ZIndex = 10
     	Switch.Text = ""
+     	Switch.AutoButtonColor = false
      
      	local KeybindText = Instance.new("TextLabel")
     	KeybindText.Parent = frame
@@ -792,7 +806,7 @@ keybind = function(name, tab, keycode, keybindText, func, desc)
     	KeybindText.Text = keybindText
      	KeybindText.TextScaled = true
     	KeybindText.Font = Data.Font
-     	KeybindText.TextColor3 = Data.MColor
+     	KeybindText.TextColor3 = Data.TextColor
      
      	local KeybindMobile = Instance.new("TextButton")
     	KeybindMobile.Parent = G
@@ -804,12 +818,13 @@ keybind = function(name, tab, keycode, keybindText, func, desc)
     	KeybindMobile.Text = keybindText
     	KeybindMobile.Font = Data.Font
      	KeybindMobile.TextScaled = true
-      	KeybindMobile.TextColor3 = Data.MColor
+      	KeybindMobile.TextColor3 = Data.TextColor
         KeybindMobile.Draggable = true 
 		KeybindMobile.Active = true 
 		KeybindMobile.Selectable = true
   		KeybindMobile.Name = keybindText
     	KeybindMobile.Visible = false
+     	KeybindMobile.AutoButtonColor = false
             
       	if desc ~= nil then
             Label.Position = UDim2.new(0,20,0,0)
@@ -899,6 +914,7 @@ selector = function(name, tab, table, func, desc)
     	Button.Text = name
     	Button.Font = Data.Font
      	Button.TextXAlignment = "Left"
+      	Button.AutoButtonColor = false
       	
        	-- Size {0, 360}, {0, 260}
         -- pos {0, 114}, {0, 222}
@@ -927,7 +943,7 @@ selector = function(name, tab, table, func, desc)
     	TextL.ZIndex = 10
      	TextL.Text = name
       	TextL.Font = Data.Font
-       	TextL.TextColor3 = Data.MColor
+       	TextL.TextColor3 = Data.TextColor
         TextL.TextScaled = true
         TextL.TextYAlignment = "Top"
         
@@ -941,7 +957,7 @@ selector = function(name, tab, table, func, desc)
      	Box.Text = ""
       	Box.PlaceholderText = "Search"
       	Box.Font = Data.Font
-       	Box.TextColor3 = Data.MColor
+       	Box.TextColor3 = Data.TextColor
         Box.TextScaled = true
         
         local Scroll = Instance.new("ScrollingFrame")
@@ -977,17 +993,18 @@ selector = function(name, tab, table, func, desc)
     				label.ZIndex = 11
            			label.Text = v
       				label.Font = Data.Font
-       				label.TextColor3 = Data.MColor
+       				label.TextColor3 = Data.TextColor
         			label.TextScaled = true
+           			label.AutoButtonColor = false
            			posf = posf +22
               
               		label.MouseButton1Click:Connect(function()
                     	local value = v
-                     	func(value)
                       	onoff = false
              			local TweenInf0 = TweenInfo.new(0.35) 
 						local PlayThis = TweenService:Create(Dropper, TweenInf0, {Size = UDim2.new(0,310,0,0)})
 						PlayThis:Play()
+      					func(value)
     					wait(0.36)
        					Dropper.Visible = false
                    	end)
@@ -1004,17 +1021,18 @@ selector = function(name, tab, table, func, desc)
     				label.ZIndex = 11
            			label.Text = v.Name
       				label.Font = Data.Font
-       				label.TextColor3 = Data.MColor
+       				label.TextColor3 = Data.TextColor
         			label.TextScaled = true
+           			label.AutoButtonColor = false
            			posf = posf +22
               
               		label.MouseButton1Click:Connect(function()
                     	local value = v
-                     	func(value)
                      	onoff = false
              			local TweenInf0 = TweenInfo.new(0.35) 
 						local PlayThis = TweenService:Create(Dropper, TweenInf0, {Size = UDim2.new(0,310,0,0)})
 						PlayThis:Play()
+      					func(value)
     					wait(0.36)
        					Dropper.Visible = false
                    	end)
@@ -1115,6 +1133,7 @@ plrselector = function(name, tab, func, desc)
     	Button.Text = name
     	Button.Font = Data.Font
      	Button.TextXAlignment = "Left"
+      	Button.AutoButtonColor = false
       	
        	-- Size {0, 360}, {0, 260}
         -- pos {0, 114}, {0, 222}
@@ -1143,7 +1162,7 @@ plrselector = function(name, tab, func, desc)
     	TextL.ZIndex = 10
      	TextL.Text = name
       	TextL.Font = Data.Font
-       	TextL.TextColor3 = Data.MColor
+       	TextL.TextColor3 = Data.TextColor
         TextL.TextScaled = true
         TextL.TextYAlignment = "Top"
         
@@ -1157,7 +1176,7 @@ plrselector = function(name, tab, func, desc)
      	Box.Text = ""
       	Box.PlaceholderText = "Search"
       	Box.Font = Data.Font
-       	Box.TextColor3 = Data.MColor
+       	Box.TextColor3 = Data.TextColor
         Box.TextScaled = true
         
         local Scroll = Instance.new("ScrollingFrame")
@@ -1195,15 +1214,16 @@ plrselector = function(name, tab, func, desc)
       				label.Font = Data.Font
        				label.TextColor3 = Color3.fromRGB(225,225,225)
         			label.TextScaled = true
+           			label.AutoButtonColor = false
            			posf = posf +22
               
               		label.MouseButton1Click:Connect(function()
                     	local value = v
-                     	func(value)
                      	onoff = false
              			local TweenInf0 = TweenInfo.new(0.35) 
 						local PlayThis = TweenService:Create(Dropper, TweenInf0, {Size = UDim2.new(0,310,0,0)})
 						PlayThis:Play()
+      					func(value)
     					wait(0.36)
        					Dropper.Visible = false
                    	end)
@@ -1225,17 +1245,18 @@ plrselector = function(name, tab, func, desc)
     				label.ZIndex = 11
            			label.Text = playa.Name
       				label.Font = Data.Font
-       				label.TextColor3 = Data.MColor
+       				label.TextColor3 = Data.TextColor
         			label.TextScaled = true
+           			label.AutoButtonColor = false
            			posf = posf +22
               
               		label.MouseButton1Click:Connect(function()
                     	local value = playa
-                     	func(value)
                       	onoff = false
              			local TweenInf0 = TweenInfo.new(0.35) 
 						local PlayThis = TweenService:Create(Dropper, TweenInf0, {Size = UDim2.new(0,310,0,0)})
 						PlayThis:Play()
+      					func(value)
     					wait(0.36)
        					Dropper.Visible = false
                    	end)
@@ -1300,7 +1321,7 @@ downvals = function(table)
       	val.Text = v
        	val.Size = UDim2.new(0.15, 0, 0.03 ,0)
         val.Position = UDim2.new(0.85, 0, num, 0)
-        val.TextColor3 = Data.MColor
+        val.TextColor3 = Data.TextColor
         val.Parent = G
         val.TextScaled = true
         val.Name = "value"
@@ -1309,5 +1330,195 @@ downvals = function(table)
   		val.TextStrokeColor3 = Data.DColor
     	val.Font = Data.Font
         num = num -0.03
+    end
+end
+
+codebox = function(name, tab, saves, func, desc)
+    for i,v in pairs(tabs) do
+    	if v[2] == tab then
+        	tabT = v
+        end
+    end
+    
+    if tabT then
+        tabT[4] = tabT[4] +1
+        local pos = tabT[3].ScrollingFrame.Size.Y.Offset +30
+        tabT[3].ScrollingFrame.Size = UDim2.new(0,175,0,pos)
+        tabT[5] = pos
+        
+    	local frame = Instance.new("Frame")
+        if tabT[1] ~= nil then
+    		frame.Parent = tabT[1]
+      	else
+       		frame.Parent = tabT[3].ScrollingFrame
+     	end
+    	frame.Name = "Codebox "..name.."|"..tabT[4]
+    	frame.Size = UDim2.new(0,175,0,30)
+        if tabT[1] ~= nil then
+        	local pos = tabT[1].Size.Y.Offset
+            frame.Position = UDim2.new(0,0,0,pos)
+        end
+    	frame.BackgroundColor3 = Color3.fromRGB(10,10,10)
+    	frame.BorderColor3 = frame.BackgroundColor3
+    	frame.ZIndex = 10
+     
+     	local Button = Instance.new("TextButton")
+    	Button.Parent = frame
+    	Button.Size = UDim2.new(0,175 -50,0,30)
+   		Button.Position = UDim2.new(0,8,0,0)
+    	Button.BackgroundColor3 = Color3.fromRGB(10,10,10)
+    	Button.BorderColor3 = frame.BackgroundColor3
+    	Button.TextColor3 = Data.TextColor
+ 		Button.TextScaled = true
+    	Button.ZIndex = 10
+    	Button.Text = name
+    	Button.Font = Data.Font
+     	Button.TextXAlignment = "Left"
+      	Button.AutoButtonColor = false
+      	
+       	-- Size {0, 360}, {0, 260}
+        -- pos {0, 114}, {0, 222}
+       
+      	local Dropper = Instance.new("ScrollingFrame")
+    	Dropper.Parent = Tabs
+    	Dropper.Size = UDim2.new(0,0,0,0) -- 550, 355
+   		Dropper.Position = UDim2.new(0,344,0,218)
+    	Dropper.BackgroundColor3 = Color3.fromRGB(10,10,10)
+    	Dropper.BorderColor3 = Data.DColor
+    	Dropper.ZIndex = 10
+        Dropper.Draggable = true 
+		Dropper.Active = true 
+		Dropper.Selectable = true
+  		Dropper.Name = name
+     	Dropper.ScrollBarImageColor3 = Data.MColor
+		Dropper.ScrollBarImageTransparency = 0
+		Dropper.CanvasSize = UDim2.new(0,0,0,0)
+  		Dropper.Visible = false
+    
+    	local DoneB = Instance.new("TextButton")
+     	DoneB.Parent = Dropper
+    	DoneB.Size = UDim2.new(0,50,0,50)
+   		DoneB.Position = UDim2.new(0,550 -50,0,355 -50)
+    	DoneB.BackgroundTransparency = 1
+    	DoneB.BorderColor3 = Data.DColor
+     	DoneB.ZIndex = 11
+      	DoneB.Font = Data.Font
+       	DoneB.Text = ">"
+        DoneB.TextColor3 = Data.TextColor
+        DoneB.TextScaled = true
+        DoneB.AutoButtonColor = false
+        
+        local Line = Instance.new("TextButton")
+     	Line.Parent = Dropper
+    	Line.Size = UDim2.new(0,50,0,50)
+   		Line.Position = UDim2.new(0,0,0,355 -50)
+    	Line.BackgroundTransparency = 1
+    	Line.BorderColor3 = Data.DColor
+     	Line.ZIndex = 11
+      	Line.Font = Data.Font
+       	Line.Text = "+"
+        Line.TextColor3 = Data.TextColor
+        Line.TextScaled = true
+        Line.AutoButtonColor = false
+    
+    	local TextL = Instance.new("TextLabel")
+    	TextL.Parent = Dropper
+    	TextL.Size = UDim2.new(0,550,0,20) -- 270
+   		TextL.Position = UDim2.new(0,0,0,7)
+    	TextL.BackgroundTransparency = 1
+    	TextL.ZIndex = 10
+     	TextL.Text = "Codebox - "..name
+      	TextL.Font = Data.Font
+       	TextL.TextColor3 = Data.TextColor
+        TextL.TextScaled = true
+        TextL.TextYAlignment = "Top"
+        
+        local Box = Instance.new("TextBox")
+    	Box.Parent = Dropper
+    	Box.Size = UDim2.new(0,550 -50 -50,0,225) -- 270
+   		Box.Position = UDim2.new(0,50,0,30)
+    	Box.BackgroundColor3 = Data.DColor
+     	Box.BorderColor3 = Data.DColor
+    	Box.ZIndex = 10
+     	Box.Text = ""
+      	Box.PlaceholderText = ""
+      	Box.Font = Data.Font
+       	Box.TextColor3 = Data.TextColor
+        Box.TextSize = 22
+        Box.TextXAlignment = "Left"
+        Box.TextYAlignment = "Top"
+        Box.ClearTextOnFocus = false
+		Box.MultiLine = true
+        
+        local Scroll = Instance.new("ScrollingFrame")
+    	Scroll.Parent = Dropper
+    	Scroll.Size = UDim2.new(0,310 -80,0,200) -- 270
+   		Scroll.Position = UDim2.new(0,40,0,70)
+    	Scroll.BackgroundTransparency = 1
+     	Scroll.BorderColor3 = Data.DColor
+    	Scroll.ZIndex = 10
+        Scroll.ScrollBarImageColor3 = Data.MColor
+		Scroll.ScrollBarImageTransparency = 0
+		Scroll.CanvasSize = UDim2.new(0,0,0,1900)
+     
+        onoff = false
+      	
+      	if desc ~= nil then
+            Button.Position = UDim2.new(0,20,0,0)
+      		dots = Instance.new("ImageButton")
+    		dots.Parent = frame
+    		dots.Size = UDim2.new(0,24,0,24)
+   			dots.Position = UDim2.new(0,0,0,6 /2)
+    		dots.BackgroundColor3 = Color3.fromRGB(10,10,10)
+    		dots.BorderColor3 = frame.BackgroundColor3
+    		dots.ZIndex = 10
+     		dots.Image = "http://www.roblox.com/asset/?id=16312714761"
+      		dots.ImageColor3 = Data.MColor
+        	dots.BackgroundTransparency = 1
+       	end
+      
+ 		tabT[1] = frame
+   
+   		Line.MouseButton1Click:Connect(function()
+        	Box.Text = Box.Text..[[
+
+]]
+        end)
+   		
+		DoneB.MouseButton1Click:Connect(function()
+      		if not saves then
+            	Box.Text = ""
+            end
+      		onoff = false
+            local TweenInf0 = TweenInfo.new(0.35) 
+			local PlayThis = TweenService:Create(Dropper, TweenInf0, {Size = UDim2.new(0,0,0,0)})
+			PlayThis:Play()
+   			func(Box.Text)
+    		wait(0.36)
+       		Dropper.Visible = false
+      	end)
+
+   		Button.MouseButton1Click:Connect(function()
+        	if onoff then
+            	onoff = false
+             	local TweenInf0 = TweenInfo.new(0.35) 
+				local PlayThis = TweenService:Create(Dropper, TweenInf0, {Size = UDim2.new(0,0,0,0)})
+				PlayThis:Play()
+    			wait(0.36)
+       			Dropper.Visible = false
+        	else
+        		onoff = true
+          		Dropper.Visible = true
+              	local TweenInf0 = TweenInfo.new(0.35) 
+				local PlayThis = TweenService:Create(Dropper, TweenInf0, {Size = UDim2.new(0,550,0,355)})
+				PlayThis:Play()
+           	end
+        end)
+    	
+     	if desc ~= nil then 
+      		dots.MouseButton1Click:Connect(function()
+            	information(desc)
+            end)
+        end
     end
 end
