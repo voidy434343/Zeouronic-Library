@@ -1,4 +1,4 @@
-local lp = game.Players.LocalPlayer
+    local lp = game.Players.LocalPlayer
 local TweenService = game:GetService("TweenService")
 
 if (writefile) then
@@ -224,7 +224,7 @@ if Data.MainSettings.OnOff then
 end
 
 SetonoffButton = function(ui)
-    if ui:IsA("TextButton") then
+    if ui:IsA("TextButton") or ui:IsA("ImageButton") then
     	if Data.MainSettings.OnOff and G:FindFirstChild("OnOff") then
         	oldonoff = G:FindFirstChild("OnOff")
          	local Back = lp.PlayerGui[Data.NameOfYourScript].Frame
@@ -253,7 +253,7 @@ SetonoffButton = function(ui)
     		error("Data.MainSettings.OnOff is Off, no Button to set.")
     	end
  	else
-  		error("Ui Part must be a TextButton.")
+  		error("Ui Part must be a Button.")
     end
 end
 
