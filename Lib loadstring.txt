@@ -1023,7 +1023,7 @@ keybind = function(name, tab, keycode, keybindText, func, desc)
     	KeybindMobile.Font = Data.Font
      	KeybindMobile.TextScaled = true
       	KeybindMobile.TextColor3 = Data.TextColor
-        makedraggable(KeybindMobile)
+        KeybindMobile.Draggable = true
 		KeybindMobile.Active = true 
 		KeybindMobile.Selectable = true
   		KeybindMobile.Name = keybindText
