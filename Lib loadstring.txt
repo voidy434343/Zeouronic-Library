@@ -1,5 +1,7 @@
-    local lp = game.Players.LocalPlayer
+local lp = game.Players.LocalPlayer
 local TweenService = game:GetService("TweenService")
+local UserInputService = game:GetService("UserInputService")
+local runService = (game:GetService("RunService"));
 
 if (writefile) then
 	if not isfolder('Zeouronic-Library') then
@@ -38,6 +40,62 @@ else
 	G.Enabled = true
 end
 
+local makedraggable = function(ui)
+local gui = ui
+
+local dragging
+local dragInput
+local dragStart
+local startPos
+local WILLDRAG = true
+
+function Lerp(a, b, m)
+	return a + (b - a) * m
+end;
+
+local lastMousePos
+local lastGoalPos
+local DRAG_SPEED = (8); -- // The speed of the UI darg.
+function Update(dt)
+    if WILLDRAG then
+	if not (startPos) then return end;
+	if not (dragging) and (lastGoalPos) then
+		gui.Position = UDim2.new(startPos.X.Scale, Lerp(gui.Position.X.Offset, lastGoalPos.X.Offset, dt * DRAG_SPEED), startPos.Y.Scale, Lerp(gui.Position.Y.Offset, lastGoalPos.Y.Offset, dt * DRAG_SPEED))
+		return 
+	end;
+
+	local delta = (lastMousePos - UserInputService:GetMouseLocation())
+	local xGoal = (startPos.X.Offset - delta.X);
+	local yGoal = (startPos.Y.Offset - delta.Y);
+	lastGoalPos = UDim2.new(startPos.X.Scale, xGoal, startPos.Y.Scale, yGoal)
+	gui.Position = UDim2.new(startPos.X.Scale, Lerp(gui.Position.X.Offset, xGoal, dt * DRAG_SPEED), startPos.Y.Scale, Lerp(gui.Position.Y.Offset, yGoal, dt * DRAG_SPEED))
+ 	end
+end;
+
+gui.InputBegan:Connect(function(input)
+	if input.UserInputType == Enum.UserInputType.MouseButton1 or input.UserInputType == Enum.UserInputType.Touch then
+		dragging = true
+		dragStart = input.Position
+		startPos = gui.Position
+		lastMousePos = UserInputService:GetMouseLocation()
+
+		input.Changed:Connect(function()
+			if input.UserInputState == Enum.UserInputState.End then
+				dragging = false
+			end
+		end)
+	end
+end)
+
+gui.InputChanged:Connect(function(input)
+	if input.UserInputType == Enum.UserInputType.MouseMovement or input.UserInputType == Enum.UserInputType.Touch then
+		dragInput = input
+	end
+end)
+
+runService.Heartbeat:Connect(Update)
+end
+
 if Data.KeySystem.On then
     if (writefile) then
         goooottenkey = readfile('Zeouronic-Library/'..Data.NameOfYourScript)
@@ -59,7 +117,7 @@ if Data.KeySystem.On then
 	KeyFr.Position = UDim2.new(0,377,0,221)
 	KeyFr.BackgroundColor3 = Color3.fromRGB(10,10,10)
 	KeyFr.BorderColor3 = Data.MColor
-	KeyFr.Draggable = true 
+	makedraggable(KeyFr)
 	KeyFr.Active = true 
 	KeyFr.Selectable = true
 	KeyFr.ZIndex = math.huge -5
@@ -125,149 +183,6 @@ if Data.KeySystem.On then
     end)
 end
 
-local Tabs = Instance.new("Frame")
-
-Tabs.Parent = G
-Tabs.Name = "Tabs"
-Tabs.Size = UDim2.new(0,0,0,0)
-Tabs.BackgroundTransparency = 1
-if Data.MainSettings.OnOff then
-	Tabs.Visible = false
-else
-	Tabs.Visible = true
-end
-
-if Data.MainSettings.OnOff then
- 	local OnOff = Instance.new("TextButton")
-	OnOff.Parent = G
-	OnOff.Name = "OnOff"
-	OnOff.Size = UDim2.new(0,145,0,45)
-	OnOff.Position = UDim2.new(0,15,0,248)
-	OnOff.BackgroundColor3 = Color3.fromRGB(10,10,10)
-	OnOff.BorderColor3 = Data.MColor
-	OnOff.TextColor3 = Data.TextColor
-	OnOff.Draggable = true 
-	OnOff.Active = true 
-	OnOff.Selectable = true
-	OnOff.TextScaled = true
-	OnOff.ZIndex = math.huge
-	OnOff.Text = Data.NameOfYourScript
-	OnOff.Font = Data.Font
- 	OnOff.AutoButtonColor = false
- 
- 	local Go = Instance.new("ScreenGui")
-
-	Go.Parent = lp.PlayerGui
-	Go.Name = Data.NameOfYourScript
-	Go.ResetOnSpawn = false
-	Go.Enabled = true
- 	
-	local Back = Instance.new("Frame")
-	Back.Parent = Go
-	Back.Size = UDim2.new(1,0,1.3,0)
-	Back.Position = UDim2.new(0,0,-0.15,0)
-	Back.BackgroundColor3 = Color3.fromRGB(0,0,0)
- 	Back.BackgroundTransparency = 1
-  	Back.BorderColor3 = Data.MColor
-	Back.Selectable = true
-	Back.ZIndex = 0 -math.huge
-    
-    local boolv = Instance.new("BoolValue")
-    boolv.Value = true
-	boolv.Parent = OnOff
- 	boolv.Name = "OnOffBool"
-    
-    bool = boolv.Value
-  	OnOff.MouseButton1Click:Connect(function()
-       	local bool = boolv.Value
-       	if bool then
-       		local TweenInf0 = TweenInfo.new(0.2) 
-			local PlayThis = TweenService:Create(Back, TweenInf0, {BackgroundTransparency = 1})
-			PlayThis:Play()
-         	Tabs.Visible = false
-          	boolv.Value = false
-       	else
-       		local TweenInf0 = TweenInfo.new(0.2) 
-			local PlayThis = TweenService:Create(Back, TweenInf0, {BackgroundTransparency = 0.3})
-			PlayThis:Play()
-         	Tabs.Visible = true
-          	boolv.Value = true
-       	end
-   	end)
-
-	OnOffD = false
-	game:GetService("RunService").Stepped:Connect(function()
-     	if OnOffD == false then
-    		local YPos = OnOff.Position.Y.Offset
-     		OnOff.Position = UDim2.new(0,15,0,YPos)
-      	end
-    end)
-		
-	game.UserInputService.InputBegan:Connect(function(input)
-    	if input.KeyCode == Data.MainSettings.Keybind then
-         	OnOffD = true
-     		if bool then
-       			local TweenInf0 = TweenInfo.new(0.2) 
-				local PlayThis = TweenService:Create(Back, TweenInf0, {BackgroundTransparency = 1})
-				PlayThis:Play()
-         		Tabs.Visible = false
-          		bool = false
-       		else
-       			local TweenInf0 = TweenInfo.new(0.2) 
-				local PlayThis = TweenService:Create(Back, TweenInf0, {BackgroundTransparency = 0.3})
-				PlayThis:Play()
-         		Tabs.Visible = true
-          		bool = true
-       		end
-    	end
-	end)
-end
-
-SetonoffButton = function(ui)
-    if ui:IsA("TextButton") or ui:IsA("ImageButton") then
-    	if Data.MainSettings.OnOff and G:FindFirstChild("OnOff") then
-        	oldonoff = G:FindFirstChild("OnOff")
-         	local Back = lp.PlayerGui[Data.NameOfYourScript].Frame
-         	boolv = oldonoff.OnOffBool
-        	boolv.Parent = ui
-         	oldonoff:Destroy()
-         	ui.Parent = G
-          
-  			ui.MouseButton1Click:Connect(function()
-       			local bool = boolv.Value
-       			if bool then
-       				local TweenInf0 = TweenInfo.new(0.2) 
-					local PlayThis = TweenService:Create(Back, TweenInf0, {BackgroundTransparency = 1})
-					PlayThis:Play()
-         			Tabs.Visible = false
-          			boolv.Value = false
-       			else
-       				local TweenInf0 = TweenInfo.new(0.2) 
-					local PlayThis = TweenService:Create(Back, TweenInf0, {BackgroundTransparency = 0.3})
-					PlayThis:Play()
-         			Tabs.Visible = true
-          			boolv.Value = true
-       			end
-   			end)
-    	else
-    		error("Data.MainSettings.OnOff is Off, no Button to set.")
-    	end
- 	else
-  		error("Ui Part must be a Button.")
-    end
-end
-
-GetOnOff = function()
-    if Data.MainSettings.OnOff then
-    	return G.OnOff
-    else
-    	error("Data.MainSettings.OnOff is Off, no Button exists.")
-    end
-end
-
-tabs = {}
-tabscounter = 0
-
 information = function(string)
     for i,v in pairs(G:GetChildren()) do
         if v.Name == "info" then
@@ -310,6 +225,193 @@ information = function(string)
 	TextLabel:Destroy()
 end
 
+local Tabs = Instance.new("Frame")
+
+Tabs.Parent = G
+Tabs.Name = "Tabs"
+Tabs.Size = UDim2.new(0,0,0,0)
+Tabs.BackgroundTransparency = 1
+if Data.MainSettings.OnOff then
+	Tabs.Visible = false
+else
+	Tabs.Visible = true
+end
+
+if Data.MainSettings.OnOff then
+ 	local OnOff = Instance.new("TextButton")
+	OnOff.Parent = G
+	OnOff.Name = "OnOff"
+	OnOff.Size = UDim2.new(0,145,0,45)
+	OnOff.Position = UDim2.new(0,15,0,248)
+	OnOff.BackgroundColor3 = Color3.fromRGB(10,10,10)
+	OnOff.BorderColor3 = Data.MColor
+	OnOff.TextColor3 = Data.TextColor
+	OnOff.Active = true 
+	OnOff.Selectable = true
+	OnOff.TextScaled = true
+	OnOff.ZIndex = math.huge
+	OnOff.Text = Data.NameOfYourScript
+	OnOff.Font = Data.Font
+ 	OnOff.AutoButtonColor = false
+  
+  	local gui = OnOff
+
+local dragging
+local dragInput
+local dragStart
+local startPos
+
+function Lerp(a, b, m)
+	return a + (b - a) * m
+end;
+
+local lastMousePos
+local lastGoalPos
+local DRAG_SPEED = (8); -- // The speed of the UI darg.
+function Update(dt)
+	if not (startPos) then return end;
+	if not (dragging) and (lastGoalPos) then
+		gui.Position = UDim2.new(0, 15, startPos.Y.Scale, Lerp(gui.Position.Y.Offset, lastGoalPos.Y.Offset, dt * DRAG_SPEED))
+		return 
+	end;
+
+	local delta = (lastMousePos - UserInputService:GetMouseLocation())
+	local xGoal = (15);
+	local yGoal = (startPos.Y.Offset - delta.Y);
+	lastGoalPos = UDim2.new(startPos.X.Scale, xGoal, startPos.Y.Scale, yGoal)
+	gui.Position = UDim2.new(startPos.X.Scale, Lerp(gui.Position.X.Offset, xGoal, dt * DRAG_SPEED), startPos.Y.Scale, Lerp(gui.Position.Y.Offset, yGoal, dt * DRAG_SPEED))
+end;
+
+gui.InputBegan:Connect(function(input)
+	if input.UserInputType == Enum.UserInputType.MouseButton1 or input.UserInputType == Enum.UserInputType.Touch then
+		dragging = true
+		dragStart = input.Position
+		startPos = gui.Position
+		lastMousePos = UserInputService:GetMouseLocation()
+
+		input.Changed:Connect(function()
+			if input.UserInputState == Enum.UserInputState.End then
+				dragging = false
+			end
+		end)
+	end
+end)
+
+gui.InputChanged:Connect(function(input)
+	if input.UserInputType == Enum.UserInputType.MouseMovement or input.UserInputType == Enum.UserInputType.Touch then
+		dragInput = input
+	end
+end)
+
+runService.Heartbeat:Connect(Update)
+ 
+ 	local Go = Instance.new("ScreenGui")
+
+	Go.Parent = lp.PlayerGui
+	Go.Name = Data.NameOfYourScript
+	Go.ResetOnSpawn = false
+	Go.Enabled = true
+ 	
+	local Back = Instance.new("Frame")
+	Back.Parent = Go
+	Back.Size = UDim2.new(1,0,1.3,0)
+	Back.Position = UDim2.new(0,0,-0.15,0)
+	Back.BackgroundColor3 = Color3.fromRGB(0,0,0)
+ 	Back.BackgroundTransparency = 1
+  	Back.BorderColor3 = Data.MColor
+	Back.Selectable = true
+	Back.ZIndex = 0 -math.huge
+    
+    local boolv = Instance.new("BoolValue")
+    boolv.Value = true
+	boolv.Parent = OnOff
+ 	boolv.Name = "OnOffBool"
+    
+    bool = boolv.Value
+  	OnOff.MouseButton1Click:Connect(function()
+       	local bool = boolv.Value
+       	if bool then
+       		local TweenInf0 = TweenInfo.new(0.2) 
+			local PlayThis = TweenService:Create(Back, TweenInf0, {BackgroundTransparency = 1})
+			PlayThis:Play()
+         	Tabs.Visible = false
+          	boolv.Value = false
+       	else
+       		local TweenInf0 = TweenInfo.new(0.2) 
+			local PlayThis = TweenService:Create(Back, TweenInf0, {BackgroundTransparency = 0.3})
+			PlayThis:Play()
+         	Tabs.Visible = true
+          	boolv.Value = true
+       	end
+   	end)
+
+	OnOffD = false
+		
+	game.UserInputService.InputBegan:Connect(function(input)
+    	if input.KeyCode == Data.MainSettings.Keybind then
+     		if bool then
+       			local TweenInf0 = TweenInfo.new(0.2) 
+				local PlayThis = TweenService:Create(Back, TweenInf0, {BackgroundTransparency = 1})
+				PlayThis:Play()
+         		Tabs.Visible = false
+          		bool = false
+       		else
+       			local TweenInf0 = TweenInfo.new(0.2) 
+				local PlayThis = TweenService:Create(Back, TweenInf0, {BackgroundTransparency = 0.3})
+				PlayThis:Play()
+         		Tabs.Visible = true
+          		bool = true
+       		end
+    	end
+	end)
+end
+
+tabs = {}
+tabscounter = 0
+
+local LibStuff = {
+SetonoffButton = function(ui)
+    if ui:IsA("TextButton") or ui:IsA("ImageButton") then
+    	if Data.MainSettings.OnOff and G:FindFirstChild("OnOff") then
+        	oldonoff = G:FindFirstChild("OnOff")
+         	local Back = lp.PlayerGui[Data.NameOfYourScript].Frame
+         	boolv = oldonoff.OnOffBool
+        	boolv.Parent = ui
+         	oldonoff:Destroy()
+         	ui.Parent = G
+          
+  			ui.MouseButton1Click:Connect(function()
+       			local bool = boolv.Value
+       			if bool then
+       				local TweenInf0 = TweenInfo.new(0.2) 
+					local PlayThis = TweenService:Create(Back, TweenInf0, {BackgroundTransparency = 1})
+					PlayThis:Play()
+         			Tabs.Visible = false
+          			boolv.Value = false
+       			else
+       				local TweenInf0 = TweenInfo.new(0.2) 
+					local PlayThis = TweenService:Create(Back, TweenInf0, {BackgroundTransparency = 0.3})
+					PlayThis:Play()
+         			Tabs.Visible = true
+          			boolv.Value = true
+       			end
+   			end)
+    	else
+    		error("Data.MainSettings.OnOff is Off, no Button to set.")
+    	end
+ 	else
+  		error("Ui Part must be a Button.")
+    end
+end,
+
+GetOnOff = function()
+    if Data.MainSettings.OnOff then
+    	return G.OnOff
+    else
+    	error("Data.MainSettings.OnOff is Off, no Button exists.")
+    end
+end,
+
 newtab = function(name, iconid)
     tabscounter = tabscounter +1
     local counter = tabscounter
@@ -322,9 +424,9 @@ newtab = function(name, iconid)
     frame.BackgroundColor3 = Color3.fromRGB(10,10,10)
     frame.BorderColor3 = frame.BackgroundColor3
     frame.TextColor3 = Data.TextColor
-    frame.Draggable = true 
-	frame.Active = true 
+    frame.Active = true 
 	frame.Selectable = true
+    makedraggable(frame)
  	frame.TextScaled = true
     frame.ZIndex = 10
     frame.Text = name
@@ -395,7 +497,7 @@ newtab = function(name, iconid)
         	tabs[tabscounter][6] = true
         end
     end)
-end
+end,
 
 closetab = function(tabname)
 	for i,v in pairs(tabs) do
@@ -415,7 +517,7 @@ closetab = function(tabname)
 			tabT[6] = true
 		end
 	end
-end
+end,
 
 opentab = function(tabname)
 	for i,v in pairs(tabs) do
@@ -435,7 +537,7 @@ opentab = function(tabname)
 			tabT[6] = true
 		end
 	end
-end
+end,
 
 label = function(name, tab)
     for i,v in pairs(tabs) do
@@ -472,7 +574,7 @@ label = function(name, tab)
      
  		tabT[1] = frame
     end
-end
+end,
 
 button = function(name, tab, func, desc)
     for i,v in pairs(tabs) do
@@ -557,7 +659,7 @@ button = function(name, tab, func, desc)
             end)
         end
     end
-end
+end,
 
 switch = function(name, tab, func, desc)
     for i,v in pairs(tabs) do
@@ -654,7 +756,7 @@ switch = function(name, tab, func, desc)
             end)
         end
     end
-end
+end,
 
 textbox = function(name, tab, default, func, desc)
     for i,v in pairs(tabs) do
@@ -732,7 +834,7 @@ textbox = function(name, tab, default, func, desc)
             end)
         end
     end
-end
+end,
 
 slider = function(name, tab, min, max, starting, func, desc)
     for i,v in pairs(tabs) do
@@ -844,7 +946,7 @@ slider = function(name, tab, min, max, starting, func, desc)
             end)
         end
     end
-end
+end,
 
 keybind = function(name, tab, keycode, keybindText, func, desc)
     for i,v in pairs(tabs) do
@@ -921,7 +1023,7 @@ keybind = function(name, tab, keycode, keybindText, func, desc)
     	KeybindMobile.Font = Data.Font
      	KeybindMobile.TextScaled = true
       	KeybindMobile.TextColor3 = Data.TextColor
-        KeybindMobile.Draggable = true 
+        makedraggable(KeybindMobile)
 		KeybindMobile.Active = true 
 		KeybindMobile.Selectable = true
   		KeybindMobile.Name = keybindText
@@ -973,7 +1075,7 @@ keybind = function(name, tab, keycode, keybindText, func, desc)
             end)
         end
     end
-end
+end,
 
 selector = function(name, tab, table, func, desc)
     for i,v in pairs(tabs) do
@@ -1028,7 +1130,7 @@ selector = function(name, tab, table, func, desc)
     	Dropper.BackgroundColor3 = Color3.fromRGB(10,10,10)
     	Dropper.BorderColor3 = Data.DColor
     	Dropper.ZIndex = 10
-        Dropper.Draggable = true 
+        makedraggable(Dropper)
 		Dropper.Active = true 
 		Dropper.Selectable = true
   		Dropper.Name = name
@@ -1192,7 +1294,7 @@ selector = function(name, tab, table, func, desc)
             end)
         end
     end
-end
+end,
 
 plrselector = function(name, tab, func, desc)
     for i,v in pairs(tabs) do
@@ -1247,7 +1349,7 @@ plrselector = function(name, tab, func, desc)
     	Dropper.BackgroundColor3 = Color3.fromRGB(10,10,10)
     	Dropper.BorderColor3 = Data.DColor
     	Dropper.ZIndex = 10
-        Dropper.Draggable = true 
+        makedraggable(Dropper) 
 		Dropper.Active = true 
 		Dropper.Selectable = true
   		Dropper.Name = name
@@ -1408,7 +1510,7 @@ plrselector = function(name, tab, func, desc)
             end)
         end
     end
-end
+end,
 
 downvals = function(table)
     for i,v in pairs(G:GetChildren()) do
@@ -1433,7 +1535,7 @@ downvals = function(table)
     	val.Font = Data.Font
         num = num -0.03
     end
-end
+end,
 
 codebox = function(name, tab, saves, func, desc)
     for i,v in pairs(tabs) do
@@ -1488,7 +1590,7 @@ codebox = function(name, tab, saves, func, desc)
     	Dropper.BackgroundColor3 = Color3.fromRGB(10,10,10)
     	Dropper.BorderColor3 = Data.DColor
     	Dropper.ZIndex = 10
-        Dropper.Draggable = true 
+        makedraggable(Dropper)
 		Dropper.Active = true 
 		Dropper.Selectable = true
   		Dropper.Name = name
@@ -1624,5 +1726,6 @@ codebox = function(name, tab, saves, func, desc)
         end
     end
 end
+}
 
-return G
+return LibStuff
